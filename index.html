@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <title>Privaatsus-kratt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 600px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+        .safe {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🛡️ Privaatsus-kratt</h1>
+<p>Vali, milliseid küpsiseid veebileht küsib:</p>
+
+<label>
+    <input type="checkbox" checked disabled>
+    Vajalikud küpsised
+</label><br>
+
+<label>
+    <input type="checkbox" id="analytics">
+    Analüütika küpsised
+</label><br>
+
+<label>
+    <input type="checkbox" id="marketing">
+    Turundus- ja jälgimisküpsised
+</label><br>
+
+<button onclick="kontrolli()">Kontrolli privaatsust</button>
+<button onclick="laadiAlla()">Laadi raport alla</button>
+
+<p id="tulemus"></p>
+
+<script>
+let raportTekst = "";
+
+function kontrolli() {
+    const analytics = document.getElementById("analytics").checked;
+    const marketing = document.getElementById("marketing").checked;
+    const tulemus = document.getElementById("tulemus");
+
+    if (marketing) {
+        tulemus.innerHTML = "⚠️ <span class='warning'>HOIATUS:</span> Turundusküpsised jälgivad sinu tegevust.";
+        raportTekst =
+            "PRIVAATSUSRAPORT\n" +
+            "-----------------\n" +
+            "Lubatud: vajalikud + turundusküpsised\n" +
+            "Riskitase: KÕRGE\n" +
+            "Soovitus: keela turundusküpsised.";
+    }
+    else if (analytics) {
+        tulemus.innerHTML = "ℹ️ <span class='warning'>MÕÕDUKAS RISK:</span> Analüütika küpsised koguvad andmeid.";
+        raportTekst =
+            "PRIVAATSUSRAPORT\n" +
+            "-----------------\n" +
+            "Lubatud: vajalikud + analüütika küpsised\n" +
+            "Riskitase: KESKMINE\n" +
+            "Soovitus: luba ainult vajadusel.";
+    }
+    else {
+        tulemus.innerHTML = "✅ <span class='safe'>TURVALINE:</span> Ainult vajalikud küpsised.";
+        raportTekst =
+            "PRIVAATSUSRAPORT\n" +
+            "-----------------\n" +
+            "Lubatud: ainult vajalikud küpsised\n" +
+            "Riskitase: MADAL\n" +
+            "Soovitus: hea valik.";
+    }
+}
+
+function laadiAlla() {
+    if (raportTekst === "") {
+        alert("Palun kontrolli enne privaatsust!");
+        return;
+    }
+
+    const fail = new Blob([raportTekst], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(fail);
+    link.download = "privaatsusraport.txt";
+    link.click();
+}
+</script>
+
+</body>
+</html>
